@@ -1,0 +1,29 @@
+name: Movie Bot Auto Sync
+
+on:
+  schedule:
+    # ئەمە فەرمانی کاتەکەیە: هەموو ٥ خولەک جارێک
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # ئەمە ڕێگەت دەدات هەر کاتێک ویستت بە دەستی ئیشی پێ بکەیت
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install firebase-admin requests
+
+      - name: Run Bot
+        run: python bot.py
+        env:
+          # ئەمە کلیلە نهێنییەکەی فایەربەیسە کە لە Settings پاشەکەوتی دەکەین
+          FIREBASE_KEY: ${{ secrets.FIREBASE_KEY }}
